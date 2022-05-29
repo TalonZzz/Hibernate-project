@@ -1,12 +1,11 @@
-package com.example.hibernate;
+package com.example.hibernate.code;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 @Table(name = "order")
 @Entity
@@ -18,22 +17,29 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
-    @Column(name = "name")
-    private String name;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = false, fetch = FetchType.LAZY)
-    private List<Customer_Order> customer_order = new ArrayList<>();
-
-    public List<Customer_Order> getCustomer_Order() {
-        return customer_order;
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id='" + id + '\'' +
+                "customer_id='" + customer.getId() + '\'' +
+                '}';
     }
 
-    public void setCustomer_Order(List<Customer_Order> ts) {
-        this.customer_order = ts;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return Objects.equals(id, order.id);
     }
 
-    public void addCustomer_Order(Customer_Order ts) {
-        this.customer_order.add(ts);
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
 

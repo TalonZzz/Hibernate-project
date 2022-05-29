@@ -1,4 +1,4 @@
-package com.example.hibernate;
+package com.example.hibernate.code;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +16,7 @@ import java.util.Objects;
 @AllArgsConstructor
 public class Customer {
     @Id
+    @Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
@@ -23,18 +24,10 @@ public class Customer {
     private String name;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY , cascade = CascadeType.ALL, orphanRemoval = false)
-    private List<Customer_Order> customer_order = new ArrayList<>();
+    private List<Order> orders = new ArrayList<>();
 
-    public List<Customer_Order> getCustomer_Order() {
-        return customer_order;
-    }
-
-    public void setCustomer_Order(List<Customer_Order> ts) {
-        this.customer_order = ts;
-    }
-
-    public void addCustomer_Order(Customer_Order ts) {
-        this.customer_order.add(ts);
+    public void addOrder(Order order) {
+        this.orders.add(order);
     }
 
     @Override
@@ -49,8 +42,8 @@ public class Customer {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Customer student = (Customer) o;
-        return Objects.equals(id, student.id);
+        Customer customer = (Customer) o;
+        return Objects.equals(id, customer.id);
     }
 
     @Override
